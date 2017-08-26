@@ -92,3 +92,42 @@ class RegistForm(FlaskForm):
         user = User.query.filter_by(phone=phone).count()
         if user == 1:
             raise ValidationError("该手机已经被注册！")
+
+
+class LoginForm(FlaskForm):
+    account = StringField(
+        label="账号",
+        validators=[
+            DataRequired("请输入账号！")
+        ],
+        description="账号",
+        render_kw={
+            "id": "input_contact",
+            "class": "form-control input-lg",
+            "placeholder": "用户名/邮箱/手机号码"
+        }
+    )
+    pwd = PasswordField(
+        label="密码",
+        validators=[
+            DataRequired("请输入密码！")
+        ],
+        description="密码",
+        render_kw={
+            "id": "input_password",
+            "class": "form-control input-lg",
+            "placeholder": "密码"
+        }
+    )
+    submit = SubmitField(
+        "登录",
+        render_kw={
+            "class": "btn btn-lg btn-success btn-block"
+        }
+    )
+
+    def validate_account(self, field):
+        account = field.data
+        account_count = User.query.filter_by(name=account).count()
+        if account_count == 0:
+            raise ValidationError("该用户名不存在！")

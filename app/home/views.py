@@ -2,7 +2,7 @@
 
 from . import home
 from flask import render_template, redirect, url_for, flash, session, request
-from app.models import User, Userlog, Comment, Movie, Moviecol
+from app.models import User, Userlog, Comment, Movie, Moviecol, Preview
 from app.home.forms import RegistForm, LoginForm, UserdetailForm, PwdForm
 from werkzeug.security import generate_password_hash
 from werkzeug.utils import secure_filename
@@ -193,9 +193,11 @@ def moviecol(page=None):
     return render_template("home/moviecol.html", page_data=page_data)
 
 
+# 上映预告
 @home.route("/animation/")
 def animation():
-    return render_template("home/animation.html")
+    data = Preview.query.all()
+    return render_template("home/animation.html", data=data)
 
 
 @home.route("/search/")

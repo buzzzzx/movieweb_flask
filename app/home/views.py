@@ -3,7 +3,7 @@
 from . import home
 from flask import render_template, redirect, url_for, flash, session, request
 from app.models import User, Userlog
-from app.home.forms import RegistForm, LoginForm, UserdetailForm
+from app.home.forms import RegistForm, LoginForm, UserdetailForm, PwdForm
 from werkzeug.security import generate_password_hash
 from werkzeug.utils import secure_filename
 import uuid
@@ -129,12 +129,23 @@ def user():
     return render_template("home/user.html", form=form, user=user)
 
 
-@home.route("/psw/")
+# 会员修改密码
+@home.route("/pwd/", methods=["GET", "POST"])
 @user_login_req
 def psw():
-    return render_template("home/psw.html")
+    form = PwdForm()
+    user = User.query.filter_by(name=session["user"]).first()
+    if form.validate_on_submit():
+        data = form.data
+        user.pwd = generate_password_hash(data["new_pwd"])
+        db.session.add(user)
+        db.session.commit()
+        flash("修改密码成功，请重新登录账户！", "success")
+        return redirect(url_for('home.logout'))
+    return render_template("home/pwd.html", form=form)
 
 
+# 插看评论记录
 @home.route("/comments/")
 @user_login_req
 def comments():

@@ -2,7 +2,7 @@
 
 from . import home
 from flask import render_template, redirect, url_for, flash, session, request
-from app.models import User, Userlog
+from app.models import User, Userlog, Comment, Movie, Moviecol
 from app.home.forms import RegistForm, LoginForm, UserdetailForm, PwdForm
 from werkzeug.security import generate_password_hash
 from werkzeug.utils import secure_filename
@@ -145,23 +145,52 @@ def psw():
     return render_template("home/pwd.html", form=form)
 
 
-# 插看评论记录
-@home.route("/comments/")
+# 查看评论记录
+@home.route("/comments/<int:page>/", methods=["GET"])
 @user_login_req
-def comments():
-    return render_template("home/comments.html")
+def comments(page=None):
+    if page is None:
+        page = 1
+    page_data = Comment.query.join(User).join(
+        Movie
+    ).filter(
+        Movie.id == Comment.movie_id,
+        User.id == session["user_id"]
+    ).order_by(
+        Comment.addtime.desc()
+    ).paginate(page=page, per_page=10)
+    return render_template("home/comments.html", page_data=page_data)
 
 
-@home.route("/loginlog/")
+# 会员登录日志
+@home.route("/loginlog/<int:page>/", methods=["GET"])
 @user_login_req
-def loginlog():
-    return render_template("home/loginlog.html")
+def loginlog(page=None):
+    if page is None:
+        page = 1
+    page_data = Userlog.query.filter_by(user_id=int(session['user_id'])).order_by(
+        Userlog.addtime.desc()
+    ).paginate(page=page, per_page=10)
+    return render_template("home/loginlog.html", page_data=page_data)
 
 
-@home.route("/moviecol/")
+# 电影收藏
+@home.route("/moviecol/<int:page>/", methods=["GET"])
 @user_login_req
-def moviecol():
-    return render_template("home/moviecol.html")
+def moviecol(page=None):
+    if page is None:
+        page = 1
+    page_data = Moviecol.query.join(
+        User
+    ).join(
+        Movie
+    ).filter(
+        User.id == session["user_id"],
+        Movie.id == Moviecol.movie_id
+    ).order_by(
+        Moviecol.addtime.desc()
+    ).paginate(page=page, per_page=10)
+    return render_template("home/moviecol.html", page_data=page_data)
 
 
 @home.route("/animation/")

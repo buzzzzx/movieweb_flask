@@ -31,6 +31,7 @@ def change_filename(filename):
     return filename
 
 
+# 首页
 @home.route("/")
 def index():
     return render_template("home/index.html")
@@ -200,9 +201,21 @@ def animation():
     return render_template("home/animation.html", data=data)
 
 
-@home.route("/search/")
-def search():
-    return render_template("home/search.html")
+# 电影搜索
+@home.route("/search/<int:page>")
+def search(page=None):
+    if page is None:
+        page = 1
+    key = request.args.get("key", "")
+    movie_count = Movie.query.filter(
+        Movie.title.ilike('%' + key + '%')
+    ).count()
+    page_data = Movie.query.filter(
+        Movie.title.ilike('%'+key+'%')
+    ).order_by(
+        Movie.addtime.desc()
+    ).paginate(page=page, per_page=10)
+    return render_template("home/search.html", key=key, page_data=page_data, movie_count=movie_count)
 
 
 @home.route("/play/")

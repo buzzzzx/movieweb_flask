@@ -24,7 +24,7 @@
                             <a href="user.html">
                                 <i class="avatar size-L radius">
                                     {% if i.user.face %}
-                                    <img alt="50x50" src="{{ url_for('static',filename='uploads/users/'+v.user.face) }}" class="img-circle"
+                                    <img alt="50x50" src="{{ url_for('static',filename='uploads/users/'+i.user.face) }}" class="img-circle"
                                      style="border:1px solid #abcdef;width:50px;">
                                     {% else %}
                                     <img alt="50x50" src="holder.js/50x50" class="img-circle" style="border:1px solid #abcdef;">
@@ -36,7 +36,7 @@
                                     <div class="comment-meta">
                                         <a class="comment-author" href="user.html">{{ i.user.name }}</a>
                                         评论于
-                                        <time title="2016-12-07 09:12:51" datetime="2016-12-07 09:12:51">{{ i.addtime }}</time>
+                                        <time title="{{ i.addtime }}" datetime="{{ i.addtime }}">{{ i.addtime }}</time>
                                     </div>
                                 </header>
                                 <div class="comment-body">

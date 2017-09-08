@@ -48,7 +48,7 @@
                                             {{ i.addtime }}
                                         </span>
                                     </span>
-                            关于电影<a>{{ i.movie.title }}</a>的评论：{{ i.content }}
+                            关于电影<a>《{{ i.movie.title }}》</a>的评论：{{ i.content | safe }}
                             <br><a href="{{ url_for('admin.comment_del', id=i.id) }}"
                                    class="label label-danger pull-right">删除</a>
                         </div>

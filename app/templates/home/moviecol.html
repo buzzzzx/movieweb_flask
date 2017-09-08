@@ -23,7 +23,7 @@
                     <div class="media">
                         <div class="media-left">
                             <a href="{{ url_for('home.play',id=v.movie_id,page=1) }}">
-                                <img class="media-object" src="{{ url_for('static', filename='uploads/'+v.movie.logo) }}" alt="{{ v.movie.title }}">
+                                <img class="media-object" src="{{ url_for('static', filename='uploads/'+v.movie.logo) }}" style="height: 83px;width: 131px" alt="{{ v.movie.title }}">
                             </a>
                         </div>
                         <div class="media-body">

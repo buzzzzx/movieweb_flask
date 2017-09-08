@@ -206,7 +206,7 @@ def movie_del(id=None):
     movie = Movie.query.filter_by(id=id).first_or_404()
     db.session.delete(movie)
     db.session.commit()
-    flash("删除电影成功！", "success")
+    flash("删除收藏电影成功！", "success")
     return redirect(url_for("admin.movie_list", page=1))
 
 

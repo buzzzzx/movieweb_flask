@@ -33,6 +33,7 @@ def change_filename(filename):
 
 # 首页
 @home.route("/<int:page>/", methods=["GET"])
+@home.route("/", methods=["GET"])
 def index(page=None):
     if page is None:
         page = 1
@@ -283,6 +284,7 @@ def search(page=None):
     ).order_by(
         Movie.addtime.desc()
     ).paginate(page=page, per_page=10)
+    page_data.key = key
     return render_template("home/search.html", key=key, page_data=page_data, movie_count=movie_count)
 
 

@@ -54,7 +54,14 @@
                             <td>{{ i.email }}</td>
                             <td>{{ i.phone }}</td>
                             <td>
-                                <img src="{{ url_for('static', filename='uploads/users/'+i.face) }}" style="width: 50px" class="img-responsive center-block" alt="">
+                                {% if i.face %}
+                                <img src="{{ url_for('static', filename='uploads/users/'+i.face) }}" style="width: 50px"
+                                     class="img-responsive center-block" alt="">
+                                {% else %}
+                                <img data-src="holder.js/50x50" style="width: 50px" class="img-responsive center-block"
+                                     alt="">
+                                {% endif %}
+
                             </td>
                             <td>{{ i.addtime }}</td>
                             <td>
